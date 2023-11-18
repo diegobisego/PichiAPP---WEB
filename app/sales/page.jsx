@@ -5,7 +5,7 @@ import HeaderSales from "./HeaderSales";
 import ChargeProducts from "./ChargeProducts";
 import { BuyResume } from "./BuyResume";
 import { getAllClients, getPayMethods, getAllProducts } from "../components/Api";
-import { handleAddProduct } from "./Handlers";
+import { handleAddProduct, handleDeleteProduct } from "./Handlers";
 
 export default function Sales() {
   const [loading, setLoading] = useState(true);
@@ -13,6 +13,7 @@ export default function Sales() {
   const [payMethods, setPayMethods] = useState([]);
   const [products, setProducts] = useState([]);
   const [buyResumeData, setBuyResumeData] = useState({ addedProducts: [] });
+  const [saleData, setSaleData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,16 +37,31 @@ export default function Sales() {
     fetchData();
   }, []);
 
+  const allDataLoaded = !loading;
+
   return (
     <div>
-      {loading ? (
-        <p>Cargando datos...</p>
-      ) : (
+      {allDataLoaded ? (
         <>
           <HeaderSales clients={clients} payMethods={payMethods} />
-          <ChargeProducts products={products} onAddProduct={(productData) => handleAddProduct(productData, setBuyResumeData)} />
-          {buyResumeData && <BuyResume {...buyResumeData} />}
+          <ChargeProducts
+            products={products}
+            onAddProduct={(productData) =>
+              handleAddProduct(productData, setBuyResumeData, setSaleData)
+            }
+          />
+          {buyResumeData && (
+            <BuyResume
+              addedProducts={buyResumeData.addedProducts}
+              onDeleteProduct={(index) =>
+                handleDeleteProduct(index, setBuyResumeData)
+              }
+              setSaleData={saleData}
+            />
+          )}
         </>
+      ) : (
+        <div className="loader">Loading...</div>
       )}
     </div>
   );

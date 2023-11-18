@@ -4,9 +4,12 @@ import moment from "moment/moment";
 export default function HeaderSales(props) {
   const { clients, payMethods } = props;
 
+
+  const efectivo = payMethods[0].idMetodoPago
+
   const [selectedClient, setSelectedClient] = useState("");
   const [selectedDate, setSelectedDate] = useState(getTodayFormattedDate());
-  const [selectedPayMethod, setSelectedPayMethod] = useState("");
+  const [selectedPayMethod, setSelectedPayMethod] = useState(efectivo);
 
   function getTodayFormattedDate() {
     return moment().format("YYYY-MM-DD");

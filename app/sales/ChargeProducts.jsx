@@ -3,32 +3,47 @@ import { useState } from "react";
 export default function ChargeProducts(props) {
   const { products, onAddProduct } = props;
 
-  console.log('productos: ',products)
-
   const [selectedProduct, setSelectedProduct] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [idProduct, setIdProduct] = useState("");
+  const [nameProduct, setNameProduct] = useState("");
+  const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState("");
 
   const handleChangeProduct = (event) => {
     setSelectedProduct(event.target.value);
-    console.log('ID del producto seleccionado:', event.target.value);
-    console.log('Array de productos:', products);
     const idProducto = parseInt(event.target.value, 10);
 
-    
-    const selectedPrice = products.find((product) => product.idProducto === idProducto)?.precioProducto || 0;
-    console.log('Precio del producto seleccionado:', selectedPrice);
-  
+    const selectedPrice =
+      products.find((product) => product.idProducto === idProducto)
+        ?.precioProducto || 0;
+    const SelectedName =
+      products.find((product) => product.idProducto === idProducto)
+        ?.nombreProducto || 0;
+
     setPrice(selectedPrice);
+    setNameProduct(SelectedName);
+    setIdProduct(idProducto);
   };
 
   const handleAddButtonClick = () => {
+    const idValue = idProduct;
+    const nameValue = nameProduct;
     const quantityValue = parseInt(quantity, 10);
     const priceValue = parseInt(price, 10);
 
-    if (!isNaN(quantityValue) && quantityValue > 0 && !isNaN(priceValue) && priceValue > 0) {
+    if (
+      !isNaN(quantityValue) &&
+      quantityValue > 0 &&
+      !isNaN(priceValue) &&
+      priceValue > 0
+    ) {
       // Llamamos a la función onAddProduct del padre para agregar el producto
-      onAddProduct({ selectedProduct, quantity: quantityValue, price: priceValue });
+      onAddProduct({
+        idProduct: idValue,
+        productName: nameValue,
+        quantity: quantityValue,
+        price: priceValue,
+      });
     } else {
       console.error("La cantidad y el precio deben ser números positivos.");
     }
@@ -77,7 +92,7 @@ export default function ChargeProducts(props) {
           />
         </div>
         {/* Agregar producto */}
-        <div className="flex-col mt-3 md:mt-0 md:mr-3">
+        <div className="flex-col mt-5 md:mt-0 md:mr-3 text-center">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
             onClick={handleAddButtonClick}

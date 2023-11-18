@@ -31,4 +31,15 @@ async function getPayMethods() {
   }
 }
 
-export { getAllProducts, getAllClients ,getPayMethods };
+async function postSales(sale){
+    try {
+      // const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/ventas`,sale)
+      // return response.data;
+      console.log('La venta: ', sale)
+    } catch (error) {
+      console.error("Error al realizar la carga de la venta:", error);
+      return [];
+    }
+}
+
+export { getAllProducts, getAllClients ,getPayMethods, postSales };
