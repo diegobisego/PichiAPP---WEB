@@ -16,9 +16,10 @@ export default function ChargeProducts(props) {
     const selectedPrice =
       products.find((product) => product.idProducto === idProducto)
         ?.precioProducto || 0;
+
     const SelectedName =
       products.find((product) => product.idProducto === idProducto)
-        ?.nombreProducto || 0;
+        ?.nombreCompleto || 0;
 
     setPrice(selectedPrice);
     setNameProduct(SelectedName);
@@ -47,7 +48,12 @@ export default function ChargeProducts(props) {
     } else {
       console.error("La cantidad y el precio deben ser números positivos.");
     }
-    setQuantity("");
+
+    // limpio campos
+    setQuantity(1);
+    setSelectedProduct("")
+    setPrice("")
+
   };
 
   return (
@@ -66,7 +72,7 @@ export default function ChargeProducts(props) {
             </option>
             {products.map((product) => (
               <option key={product.idProducto} value={product.idProducto}>
-                {product.nombreProducto}
+                {product.nombreCompleto}
               </option>
             ))}
           </select>

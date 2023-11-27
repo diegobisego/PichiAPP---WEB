@@ -1,12 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { MdDelete } from "react-icons/md";
-import { postSales } from "../components/Api";
+import { postSales } from "../../components/Api";
+import { HeaderContext } from "../../context/HeaderContext";
 
 export function BuyResume(props) {
-  const { addedProducts, onDeleteProduct, saleData } = props;
+  const { addedProducts, onDeleteProduct, onDeleteAllProducts,  } = props;
+  const { headerInfo } = useContext(HeaderContext);
+
 
   const [totalSale, setTotalSale] = useState(0);
-  const [itemsForBackend, setItemsForBackend] = useState([]);
+  const [itemsDeleted, setItemsDeleted] = useState([]);
 
   useEffect(() => {
     // Calcular el total de la venta al cambiar los productos agregados
@@ -18,33 +21,48 @@ export function BuyResume(props) {
   }, [addedProducts]);
 
   const handleFinishSale = async () => {
-    // Enviar los datos al backend al finalizar la venta
-    console.log("Enviando datos al backend:", addedProducts);
-
     try {
-      // Comenté esta línea para evitar un error
-      // const result = await postSales(itemsForBackend);
-      console.log("resultado venta: ", addedProducts);
 
-      // if (result) {
-      //   console.log("Venta cargada");
-      //   // aquí podrías mostrar un sweetalert
-      // }
+      // Crear el objeto de venta combinando el encabezado y los detalles de los productos
+      const saleData = {
+        idCodigoComprobante: 1, // aca tengo q buscarle la vuelta para el tipo
+        nroComprobante: headerInfo.selectBillNumber,
+        fecha: headerInfo.selectedDate,
+        idCliente: Number(headerInfo.selectedClient),
+        idVendedor:1,
+        idMetodoPago:Number(headerInfo.selectedPayMethod),
+        subTotal: totalSale,
+        impuestos: 0,
+        descuentos: 0,
+        total: totalSale
+      };
+
+      console.log('datos de la venta: ', saleData)
+
+      // Realizar la solicitud de venta
+      const result = await postSales(saleData);
+
+      if (result) {
+        console.log("Venta cargada");
+        // Aquí podrías mostrar un sweetalert u otra acción después de una venta exitosa
+      }
     } catch (error) {
       console.log("Error en la venta: ", error);
       // Aquí podrías mostrar un mensaje de error o manejarlo de acuerdo a tus necesidades
     }
 
     // Limpiar la lista de productos y el total después de finalizar la venta
-    setItemsForBackend([]);
+    setItemsDeleted([]);
     setTotalSale(0);
+    onDeleteAllProducts();
+
   };
 
   const handleDeleteProduct = (index) => {
     // Eliminar el producto y actualizar el total
     const updatedProducts = [...addedProducts];
     const deletedProduct = updatedProducts.splice(index, 1)[0];
-    setItemsForBackend((prevItems) => [...prevItems, deletedProduct]);
+    setItemsDeleted((prevItems) => [...prevItems, deletedProduct]);
     onDeleteProduct(index);
   };
 
@@ -81,10 +99,9 @@ export function BuyResume(props) {
         </ul>
       </div>
       <div className="flex items-center justify-between border-solid border-2 border-sky-500 m-4 p-2 rounded shadow-lg shadow-gray-400">
-  <h2 className="m-0">TOTAL</h2>
-  <span className="m-0">$ {totalSale}</span>
-</div>
-
+        <h2 className="m-0">TOTAL</h2>
+        <span className="m-0">$ {totalSale}</span>
+      </div>
 
       <div className="flex-col mt-5 md:mt-0 md:mr-3 text-center">
         <button

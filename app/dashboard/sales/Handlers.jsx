@@ -1,12 +1,10 @@
 // handlers para agregar productos
 
-export const handleAddProduct = (productData, setBuyResumeData, setSaleData) => {
+export const handleAddProduct = (productData, setBuyResumeData) => {
   setBuyResumeData((prevData) => ({
     ...prevData,
     addedProducts: [productData, ...prevData.addedProducts],
   }));
-
-  setSaleData((prevData) => [...prevData, productData]);
 };
 
 
@@ -24,3 +22,12 @@ export const handleDeleteProduct = (index, setBuyResumeData) => {
 export const setSaleData = (data, setSaleData) => {
   setSaleData((prevData) => [...prevData, data]);
 };
+
+
+// elimina los productos de la lista cuando finaliza la venta
+export const handleDeleteAllProducts = (setBuyResumeData) => {
+  // Lógica para borrar todos los productos
+  setBuyResumeData({ addedProducts: [] });
+};
+
+

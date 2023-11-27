@@ -1,20 +1,22 @@
-'use client'
+"use client";
 
 import { useState, useEffect } from "react";
 import HeaderSales from "./HeaderSales";
 import ChargeProducts from "./ChargeProducts";
 import { BuyResume } from "./BuyResume";
-import { getAllClients, getPayMethods, getAllProducts } from "../components/Api";
-import { handleAddProduct, handleDeleteProduct } from "./Handlers";
+import {  getAllClients,  getPayMethods,  getAllProducts,} from "../../components/Api";
+import {  handleAddProduct,  handleDeleteProduct,  handleDeleteAllProducts} from "./Handlers";
 
 export default function Sales() {
+
+  //seteos de variables
   const [loading, setLoading] = useState(true);
   const [clients, setClients] = useState([]);
   const [payMethods, setPayMethods] = useState([]);
   const [products, setProducts] = useState([]);
   const [buyResumeData, setBuyResumeData] = useState({ addedProducts: [] });
-  const [saleData, setSaleData] = useState([]);
 
+  // llamo a la api para traer los datos y los guardo en las variables
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -37,17 +39,23 @@ export default function Sales() {
     fetchData();
   }, []);
 
+  // constante para determinar si esta cargando la pagina
   const allDataLoaded = !loading;
+
 
   return (
     <div>
       {allDataLoaded ? (
         <>
-          <HeaderSales clients={clients} payMethods={payMethods} />
+        <HeaderSales
+          clients={clients}
+          payMethods={payMethods}
+        />
+
           <ChargeProducts
             products={products}
             onAddProduct={(productData) =>
-              handleAddProduct(productData, setBuyResumeData, setSaleData)
+              handleAddProduct(productData, setBuyResumeData)
             }
           />
           {buyResumeData && (
@@ -56,12 +64,14 @@ export default function Sales() {
               onDeleteProduct={(index) =>
                 handleDeleteProduct(index, setBuyResumeData)
               }
-              setSaleData={saleData}
+              onDeleteAllProducts={() =>
+                handleDeleteAllProducts(setBuyResumeData)
+              }
             />
           )}
         </>
       ) : (
-        <div className="loader">Loading...</div>
+        <div className="loader">Cargando</div>
       )}
     </div>
   );
