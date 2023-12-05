@@ -2,19 +2,23 @@ import { useState, useEffect, useContext } from "react";
 import { MdDelete } from "react-icons/md";
 import { postSales } from "../../components/Api";
 import { HeaderContext } from "../../context/HeaderContext";
+import Swal from "sweetalert2";
+import moment from "moment";
+
 
 export function BuyResume(props) {
-  const { addedProducts, onDeleteProduct, onDeleteAllProducts,  } = props;
+  const { addedProducts, onDeleteProduct, onDeleteAllProducts } = props;
   const { headerInfo } = useContext(HeaderContext);
-
 
   const [totalSale, setTotalSale] = useState(0);
   const [itemsDeleted, setItemsDeleted] = useState([]);
+  const [descuentos, setDescuenstos] = useState(0);
+
 
   useEffect(() => {
     // Calcular el total de la venta al cambiar los productos agregados
     const total = addedProducts.reduce((acc, item) => {
-      return acc + item.price * item.quantity;
+      return acc + item.totalUnit * item.cantidad;
     }, 0);
 
     setTotalSale(total);
@@ -22,29 +26,36 @@ export function BuyResume(props) {
 
   const handleFinishSale = async () => {
     try {
+      // Cálculos
+      const subTotalValue =  ((totalSale - descuentos) / process.env.NEXT_PUBLIC_SACAR_IVA).toFixed(2); 
+      const subTotal =  parseFloat(subTotalValue); 
+      const impuestosValue = (totalSale - subTotal).toFixed(2); 
+      const impuestos = parseFloat(impuestosValue); 
+      const totalConImpuestosValue = (subTotal + impuestos).toFixed(2); 
+      const totalConImpuestos = parseFloat(totalConImpuestosValue); 
 
-      // Crear el objeto de venta combinando el encabezado y los detalles de los productos
+     
       const saleData = {
-        idCodigoComprobante: 1, // aca tengo q buscarle la vuelta para el tipo
+        idCodigoComprobante: 1, 
         nroComprobante: headerInfo.selectBillNumber,
-        fecha: headerInfo.selectedDate,
-        idCliente: Number(headerInfo.selectedClient),
-        idVendedor:1,
-        idMetodoPago:Number(headerInfo.selectedPayMethod),
-        subTotal: totalSale,
-        impuestos: 0,
-        descuentos: 0,
-        total: totalSale
+        fecha: moment(headerInfo.selectedDate).format('YYYY-MM-DD HH:mm:ss'),
+        idCliente: parseInt(headerInfo.selectedClient,10),
+        idVendedor: 1,
+        idMetodoPago: parseInt(headerInfo.selectedPayMethod,10),
+        subTotal,
+        impuestos, 
+        descuentos, 
+        total: totalConImpuestos      
       };
-
-      console.log('datos de la venta: ', saleData)
 
       // Realizar la solicitud de venta
       const result = await postSales(saleData);
 
-      if (result) {
-        console.log("Venta cargada");
-        // Aquí podrías mostrar un sweetalert u otra acción después de una venta exitosa
+       if (result.status === 201) {
+        Swal.fire({
+          title: "Venta Realizada!",
+          icon: "success"
+        });
       }
     } catch (error) {
       console.log("Error en la venta: ", error);
@@ -55,7 +66,6 @@ export function BuyResume(props) {
     setItemsDeleted([]);
     setTotalSale(0);
     onDeleteAllProducts();
-
   };
 
   const handleDeleteProduct = (index) => {
@@ -84,9 +94,9 @@ export function BuyResume(props) {
               </span>
               <div className="flex">
                 <span className="ml-2 mb-2 md:mb-0 md:ml-auto">
-                  {item.quantity}
+                  {item.cantidad}
                 </span>
-                <span className="ml-2">- ${item.price * item.quantity}</span>
+                <span className="ml-2">- ${item.totalUnit * item.cantidad}</span>
                 <button
                   className="ml-2 p-1 text-white bg-red-500 rounded-full hover:bg-red-700"
                   onClick={() => handleDeleteProduct(index)}

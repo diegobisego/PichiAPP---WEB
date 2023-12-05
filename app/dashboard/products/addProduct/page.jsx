@@ -81,7 +81,8 @@ const AddProduct = () => {
       idCategoriaProducto: selectedCategory,  
       idUnidadMedidaProducto: selectedProductUM,  
       precioProducto: selectedProductPrice,
-      nombreCompleto: `${selectedProductName} x ${selectedProductQuantity}${nameUm}`
+      nombreCompleto: `${selectedProductName} x ${selectedProductQuantity}${nameUm}`,
+      estado: 'Activo'
     };
 
     try {

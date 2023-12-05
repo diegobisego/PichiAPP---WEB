@@ -3,16 +3,16 @@ import Link from "next/link";
 
 const links = [
   {
-    label: "Agregar Productos",
-    route: "/dashboard/products/addProduct",
+    label: "Resumen de Cuentas",
+    route: "/dashboard/clients/accountResume",
   },
   {
-    label: "Lista de Precios",
-    route: "/dashboard/products/listPrice",
+    label: "Agregar Cliente",
+    route: "/dashboard/clients/addClient",
   }
 ];
 
-export default function products()  {
+export default function clients()  {
 
     <Navigation/>
 

@@ -7,53 +7,50 @@ export default function ChargeProducts(props) {
   const [idProduct, setIdProduct] = useState("");
   const [nameProduct, setNameProduct] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState(0);
 
   const handleChangeProduct = (event) => {
-    setSelectedProduct(event.target.value);
     const idProducto = parseInt(event.target.value, 10);
-
-    const selectedPrice =
-      products.find((product) => product.idProducto === idProducto)
-        ?.precioProducto || 0;
+    const selectedProduct = products.find((product) => product.idProducto === idProducto);
 
     const SelectedName =
       products.find((product) => product.idProducto === idProducto)
         ?.nombreCompleto || 0;
 
-    setPrice(selectedPrice);
     setNameProduct(SelectedName);
     setIdProduct(idProducto);
+    setPrice(selectedProduct?.precioProducto || 0);
   };
 
   const handleAddButtonClick = () => {
-    const idValue = idProduct;
     const nameValue = nameProduct;
     const quantityValue = parseInt(quantity, 10);
-    const priceValue = parseInt(price, 10);
+    const discount = 0;
+    const subTotalPriceValue = parseFloat((price - discount) / parseFloat(process.env.NEXT_PUBLIC_SACAR_IVA)).toFixed(2);
+    const subTotalPriceNumber = parseFloat(subTotalPriceValue);    
+    const taxesValue = parseFloat((price - subTotalPriceValue)).toFixed(2);
+    const taxes = parseFloat(taxesValue);
+    const totalWithtaxesValue = parseFloat(parseFloat(subTotalPriceValue) + parseFloat(taxes)).toFixed(2);
+    const totalWithtaxes = parseFloat(totalWithtaxesValue);
 
-    if (
-      !isNaN(quantityValue) &&
-      quantityValue > 0 &&
-      !isNaN(priceValue) &&
-      priceValue > 0
-    ) {
-      // Llamamos a la función onAddProduct del padre para agregar el producto
+    if (!isNaN(quantityValue) && quantityValue > 0 && !isNaN(subTotalPriceValue) && subTotalPriceValue > 0) {
       onAddProduct({
-        idProduct: idValue,
-        productName: nameValue,
-        quantity: quantityValue,
-        price: priceValue,
+        cantidad: quantityValue,
+        subTotalUnit: subTotalPriceNumber,
+        impuestoUnit: taxes,
+        descuentoUnit: discount,
+        totalUnit: totalWithtaxes,
+        idProducto: idProduct,
+        productName: nameValue
       });
     } else {
       console.error("La cantidad y el precio deben ser números positivos.");
     }
 
-    // limpio campos
+    // Limpiar campos
     setQuantity(1);
-    setSelectedProduct("")
-    setPrice("")
-
+    setSelectedProduct("");
+    setPrice(0);
   };
 
   return (
@@ -61,7 +58,7 @@ export default function ChargeProducts(props) {
       <div className="flex flex-col md:flex-row md:items-center border-solid border-2 border-sky-500 m-4 p-2 rounded shadow-lg shadow-gray-400">
         {/* Seleccion de producto */}
         <div className="flex-col mt-3 md:mt-0 md:mr-3">
-          <p className="mr-3">Producto</p>
+          <p className="mr-3">  </p>
           <select
             className="w-full md:w-32 text-black text-center rounded"
             value={selectedProduct}

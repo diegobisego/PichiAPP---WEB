@@ -7,7 +7,7 @@ import Link from "next/link";
 const links = [
   {
     label: "Clientes",
-    route: "/clients",
+    route: "/dashboard/clients",
   },
   {
     label: "Productos",
