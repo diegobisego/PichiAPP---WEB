@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { MdDelete } from "react-icons/md";
-import { postSales } from "../../components/Api";
+import { postSales, postSalesDetails } from "../../components/Api";
 import { HeaderContext } from "../../context/HeaderContext";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -49,14 +49,27 @@ export function BuyResume(props) {
       };
 
       // Realizar la solicitud de venta
-      const result = await postSales(saleData);
+      const resultPostSale = await postSales(saleData)
+      const idVenta = resultPostSale.data.idVenta
 
-       if (result.status === 201) {
+      // agrego el id de la venta en cada una de los detalles de las ventas
+      const finishSaleDetail = addedProducts.map(product => ({ ...product, idVenta }))
+
+
+      // realiza la solicitud de ventas detail
+      const resultSaleDitails = await postSalesDetails(finishSaleDetail)
+
+       if (resultPostSale.status === 201 && resultSaleDitails.status === 201) {
         Swal.fire({
           title: "Venta Realizada!",
           icon: "success"
         });
-      }
+       } else {
+        Swal.fire({
+          title: "Hubo un error en la venta!",
+          icon: "error"
+        });
+       }
     } catch (error) {
       console.log("Error en la venta: ", error);
       // Aquí podrías mostrar un mensaje de error o manejarlo de acuerdo a tus necesidades

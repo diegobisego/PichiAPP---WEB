@@ -89,7 +89,7 @@ async function getCities() {
   }
 }
 
-/*METODOS POST, PU Y PATCH*/
+/*METODOS POST, PUT Y PATCH*/
 
 async function postSales(sale) {
   try {
@@ -101,6 +101,20 @@ async function postSales(sale) {
 
   } catch (error) {
     console.error("Error al realizar la carga de la venta:", error);
+    return [];
+  }
+}
+
+async function postSalesDetails(sale) {
+  try {
+    const responseSaleDetail = await axios.post(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/salesDetails`,
+      sale
+    );
+    return responseSaleDetail;
+
+  } catch (error) {
+    console.error("Error al realizar la carga de la venta Detalle:", error);
     return [];
   }
 }
@@ -128,5 +142,6 @@ export {
   getProductUm,
   patchProduct,
   getCountries,
-  getCities
+  getCities,
+  postSalesDetails
 };
