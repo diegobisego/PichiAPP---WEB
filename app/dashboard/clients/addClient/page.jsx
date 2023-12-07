@@ -2,36 +2,55 @@
 
 import axios from "axios";
 
-import { getAllClients, getCountries, getCities } from "@/app/components/Api";
+
+import {
+  getAllClients,
+  getCountries,
+  getStates,
+  getCities,
+  getTaxStatus,
+} from "@/app/components/Api";
 import { useState, useEffect } from "react";
 
-const AddClient = () => {
 
+const AddClient = () => {
   //useState
   const [allClients, setAllClients] = useState([]);
+  const [allTaxStatus, setAllTaxStatus] = useState([]);
   const [allCountries, setAllCountries] = useState([]);
+  const [allStates, setAllStates] = useState([]);
   const [allCities, setAllCities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedClientName, setSelectedClientName] = useState("");
+  const [selectedClientPhone, setSelectedClientPhone] = useState("");
+  const [selectedClientEmail, setSelectedClientEmail] = useState("");
+  const [selectedClientTaxStatus, setSelectedTaxStatus] = useState("");
+  const [selectedClientDniCuit, setSelectedClientDniCuit] = useState("");
+  const [selectedClientAddInfo, setSelectedClientAddInfo] = useState("");
+  const [selectedClientBusinessName, setSelectedClientBusinessName] =
+    useState("");
   const [selectedClientAddress, setSelectedClientAddress] = useState("");
-  const [SelectedClientCountry, setSelectedClientCountry] = useState("");
-  const [SelectedClientCity, setSelectedClientCity] = useState("");
+  const [selectedClientCountry, setSelectedClientCountry] = useState("");
+  const [selectedClientState, setSelectedClientState] = useState("");
+  const [selectedClientCity, setSelectedClientCity] = useState("");
+  const [stateLoaded, setStateLoaded] = useState(true);
+  const [cityLoaded, setCityLoaded] = useState(true);
 
   useEffect(() => {
     // Fetch de datos
     const fetchData = async () => {
       try {
-        const [clientsData, countriesData, allCities] = await Promise.all([
+        const [clientsData, countriesData, taxStatusData] = await Promise.all([
           getAllClients(),
           getCountries(),
-          getCities()  
-
+          getTaxStatus(),
         ]);
         setAllClients(clientsData);
         setAllCountries(countriesData);
+        setAllTaxStatus(taxStatusData);
         setLoading(false);
       } catch (error) {
-        console.error("Error al obtener los datos de categoría:", error);
+        console.error("Error al obtener los datos:", error);
         setLoading(false);
       }
     };
@@ -40,50 +59,98 @@ const AddClient = () => {
   }, []);
 
   // Handlers
+
+  // nombre y apellado
   const handleNameClientChange = (event) => {
-    console.log(event.target.value);
     setSelectedClientName(event.target.value);
   };
 
+  // email
+  const handleEmailClientChange = (event) => {
+    setSelectedClientEmail(event.target.value);
+  };
+
+  // telefono
+  const handlePhoneClientChange = (event) => {
+    setSelectedClientPhone(event.target.value);
+  };
+
+  // info adicional
+  const handleAddInfoClientChange = (event) => {
+    setSelectedClientAddInfo(event.target.value);
+  };
+
+  // dni / cuit
+  const handleDniCuitClientChange = (event) => {
+    setSelectedClientDniCuit(event.target.value);
+  };
+
+  // nombre de la empresa
+  const handleBusinessNameClientChange = (event) => {
+    setSelectedClientBusinessName(event.target.value);
+  };
+
+  // direccion
   const handleAddressClientChange = (event) => {
     setSelectedClientAddress(event.target.value);
   };
 
-  const handleSelectedCountry = (event) => {
-    setSelectedClientCountry(Number(event.target.value));
-    const countryName = allCountries.find(
-      (country) => country.idPais === Number(event.target.value)
-    )?.descripcion;
-    setNameUm(countryName);
+  // ciudad
+  const handleSelectedCity = (event) => {
+    const selectedCityCode = event.target.value;
+    setSelectedClientCity(selectedCityCode);
   };
 
-  const handleSelectedCity = (event) => {
-    setSelectedClientCity(Number(event.target.value));
-    const cityName = allCity.find(
-      (city) => city.idCiudad === Number(event.target.value)
-    )?.descripcion;
-    setNameUm(cityName);
+  // condicion fiscal
+  const handleSelectedTaxStatus = (event) => {
+    const selectTaxStatus = Number(event.target.value)
+    setSelectedTaxStatus(selectTaxStatus);
+  };
+
+  // provincia
+  const handleSelectedState = async (event) => {
+    const selectedStateCode = event.target.value;
+    setSelectedClientState(selectedStateCode);
+
+    // Setear la Provincia en base al país
+    const cities = await getCities(event.target.value);
+    setAllCities(cities);
+    setCityLoaded(false);
+  };
+
+  // carga de paises y carga de provincias
+  const handleSelectedCountry = async (event) => {
+    const selectedCountryCode = event.target.value;
+    setSelectedClientCountry(selectedCountryCode);
+
+    // Setear la Provincia en base al país
+    const states = await getStates(event.target.value);
+    setAllStates(states);
+    setStateLoaded(false);
   };
 
   // Botón finalizar carga de producto
   const handleFinishAddClient = async (event) => {
     event.preventDefault();
 
-    const productData = {
-      nombreProducto: selectedProductName,
-      pesoCantidadProducto: selectedProductQuantity,
-      stockProducto: selectedProductStock,
-      idCategoriaProducto: selectedCategory,
-      idUnidadMedidaProducto: selectedProductUM,
-      precioProducto: selectedProductPrice,
-      nombreCompleto: `${selectedProductName} x ${selectedProductQuantity}${nameUm}`,
-      estado: "Activo",
+    const clientData = {
+      nombreCliente: selectedClientName,
+      direccion: selectedClientAddress,
+      telefono: selectedClientPhone,
+      email: selectedClientEmail,
+      razonSocial: selectedClientBusinessName,
+      infoAdicional: selectedClientAddInfo,
+      idCondicionFiscal: selectedClientTaxStatus,
+      ciudad: selectedClientCity,
+      pais: selectedClientCountry,
+      provincia:selectedClientState,
+      dniCuit: selectedClientDniCuit
     };
 
     try {
       const result = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/products`,
-        productData
+        `${process.env.NEXT_PUBLIC_BASE_URL}/clients`,
+        clientData
       );
       result.status === 201
         ? console.log("Se cargó el producto:", result)
@@ -92,6 +159,8 @@ const AddClient = () => {
       console.error("Error al cargar el producto:", error);
     }
   };
+
+  
 
   const allDataLoaded = !loading;
   return (
@@ -106,13 +175,13 @@ const AddClient = () => {
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
-                  Cliente *
+                  Nombre y Apellido *
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white text-center"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   type="text"
                   placeholder="Juan Perez"
                   onChange={handleNameClientChange}
@@ -123,13 +192,13 @@ const AddClient = () => {
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-first-name"
                 >
                   Direccion *
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white text-center"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   type="text"
                   placeholder="Pasaje San Pedro 123"
                   onChange={handleAddressClientChange}
@@ -140,27 +209,30 @@ const AddClient = () => {
             <div className="flex flex-wrap -mx-3 mb-2">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
                 >
                   Pais *
                 </label>
                 <div className="relative">
                   <select
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-center"
-                    value={SelectedClientCountry}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={selectedClientCountry}
                     onChange={handleSelectedCountry}
                   >
                     <option value="" disabled>
-                      Seleccione un pais
+                      Seleccione un Pais
                     </option>
                     {allCountries.map((country) => (
-                      <option key={country.idPais} value={country.idPais}>
-                        {country.descripcion}
+                      <option
+                        key={country.country_name}
+                        value={country.country_name}
+                      >
+                        {country.country_name}
                       </option>
                     ))}
                   </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
                     <svg
                       className="fill-current h-4 w-4"
                       xmlns="http://www.w3.org/2000/svg"
@@ -172,31 +244,69 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
-            {/* Ciudad */}
-            <div className="flex flex-wrap -mx-3 mb-2">
+            {/* Provincias */}
+            <div className="flex flex-wrap -mx-3 mb-2 ">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-state"
+                >
+                  Provincia *
+                </label>
+                <div className="relative">
+                  <select
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={selectedClientState}
+                    onChange={handleSelectedState}
+                    disabled={stateLoaded}
+                  >
+                    <option value="" disabled>
+                      Seleccione una Provincia
+                    </option>
+                    {allStates.map((state) => (
+                      <option key={state.state_name} value={state.state_name}>
+                        {state.state_name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+                    <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Ciudades */}
+            <div className="flex flex-wrap -mx-3 mb-2 ">
+              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
                 >
                   Ciudad *
                 </label>
                 <div className="relative">
                   <select
-                    className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-center"
-                    value={SelectedClientCity}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={selectedClientCity}
                     onChange={handleSelectedCity}
+                    disabled={cityLoaded}
                   >
                     <option value="" disabled>
-                      Seleccione una ciudad
+                      Seleccione una Ciudad
                     </option>
                     {allCities.map((city) => (
-                      <option key={city.idPais} value={city.idPais}>
-                        {city.descripcion}
+                      <option key={city.city_name} value={city.city_name}>
+                        {city.city_name}
                       </option>
                     ))}
                   </select>
-                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
                     <svg
                       className="fill-current h-4 w-4"
                       xmlns="http://www.w3.org/2000/svg"
@@ -208,7 +318,142 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
-            
+            {/* Telefono */}
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
+                >
+                  Telefono *
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="string"
+                  placeholder="Sin 0 y sin 15"
+                  onChange={handlePhoneClientChange}
+                />
+              </div>
+            </div>
+            {/* email */}
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
+                >
+                  Email *
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="email"
+                  placeholder="correo@email.com"
+                  onChange={handleEmailClientChange}
+                />
+              </div>
+            </div>
+            {/* DNI/CUIT */}
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
+                >
+                  DNI / CUIT *
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="number"
+                  placeholder="Sin puntos ni guiones"
+                  onChange={handleDniCuitClientChange}
+                  onWheel={(e) => e.target.blur()}
+                />
+              </div>
+            </div>
+            {/* Condicion Fiscal */}
+            <div className="flex flex-wrap -mx-3 mb-2">
+              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-state"
+                >
+                  Condicion Fiscal *
+                </label>
+                <div className="relative">
+                  <select
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    value={selectedClientTaxStatus}
+                    onChange={handleSelectedTaxStatus}
+                  >
+                    <option value="" disabled>
+                      Condicion Fical
+                    </option>
+                    {allTaxStatus.map((tx) => (
+                      <option
+                        key={tx.idCondicionFiscal}
+                        value={tx.idCondicionFiscal}
+                      >
+                        {tx.descripcion}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+                    <svg
+                      className="fill-current h-4 w-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Razon Social */}
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
+                >
+                  Razon Social
+                </label>
+                <input
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="string"
+                  placeholder="La Empresa S.R.L"
+                  onChange={handleBusinessNameClientChange}
+                />
+              </div>
+            </div>
+            {/* Info Adicional */}
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  htmlFor="grid-first-name"
+                >
+                  Info Adicional
+                </label>
+                <textarea
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  type="string"
+                  placeholder="Datos extras"
+                  onChange={handleAddInfoClientChange}
+                />
+              </div>
+            </div>
+            {/* Boton finalizar */}
+            <div className="flex justify-center">
+              <button
+                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                onClick={handleFinishAddClient}
+              >
+                <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                  Cargar Cliente
+                </span>
+              </button>
+            </div>
           </form>
         </div>
       ) : (

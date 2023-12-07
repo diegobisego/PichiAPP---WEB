@@ -13,7 +13,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-500 p-4 flex justify-between items-center">
+    <nav className="bg-teal-800 text-white p-4 flex justify-between items-center">
       
       {/* Elemento izquierdo (nombre de la empresa desde .env.local) */}
       <div className="text-white text-2xl font-bold"><Link href={'/dashboard'}>{process.env.NEXT_PUBLIC_EMPRESA}</Link></div>

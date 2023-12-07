@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getApiCountries } from "./Api_Countries";
 
 
 /*METODOS GET*/
@@ -67,20 +68,65 @@ async function getProductUm() {
 
 async function getCountries() {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/shared/countries`
-    );
+     const authToken = await getApiCountries()
+
+     const response = await axios.get('https://www.universal-tutorial.com/api/countries/', {
+      headers: {
+        Authorization: `Bearer ${authToken.auth_token}`,
+        Accept: "application/json"
+      }
+     })
+    
     return response.data;
   } catch (error) {
-    console.error("Error al obtener categorias:", error);
+    console.error("Error al obtener paises:", error);
     return [];
   }
 }
 
-async function getCities() {
+async function getStates(country) {
+  try {
+
+    const authToken = await getApiCountries()
+
+    const response = await axios.get(`https://www.universal-tutorial.com/api/states/${country}`, {
+      headers: {
+        Authorization: `Bearer ${authToken.auth_token}`,
+        Accept: "application/json"
+      }
+     })
+
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener ciudades:", error);
+    return [];
+  }
+}
+
+
+async function getCities(state) {
+  try {
+
+    const authToken = await getApiCountries()
+
+    const response = await axios.get(`https://www.universal-tutorial.com/api/cities/${state}`, {
+      headers: {
+        Authorization: `Bearer ${authToken.auth_token}`,
+        Accept: "application/json"
+      }
+     })
+
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener ciudades:", error);
+    return [];
+  }
+}
+
+async function getTaxStatus() {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/shared/cities`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/clients/tax-status`
     );
     return response.data;
   } catch (error) {
@@ -142,6 +188,8 @@ export {
   getProductUm,
   patchProduct,
   getCountries,
+  getStates,
+  postSalesDetails,
   getCities,
-  postSalesDetails
+  getTaxStatus
 };
