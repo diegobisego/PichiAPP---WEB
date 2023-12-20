@@ -87,3 +87,28 @@ body {
 }
 
 
+
+/* Simplifica los estilos del acordeón */
+.accordion-item {
+  margin-bottom: 8px;
+}
+
+.accordion-header {
+  cursor: pointer;
+  padding: 8px;
+  background-color: #272222;
+  color: white; /* Agrega este estilo para asegurarte de que el texto sea visible */
+}
+
+.accordion-header.active {
+  background-color: #2f2f3d;
+}
+
+.accordion-content {
+  padding: 8px;
+  display: none;
+}
+
+.accordion-content.active {
+  display: block;
+}

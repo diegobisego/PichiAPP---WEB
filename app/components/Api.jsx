@@ -103,6 +103,34 @@ async function getStates(country) {
   }
 }
 
+async function getAccountResume() {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/salesDetails/accountResume`
+    );
+
+    console.log('respuesta desde la api:', response)
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener categorias:", error);
+    return [];
+  }
+}
+
+async function getAccountStaiment() {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/salesDetails/accountStaiment`
+    );
+
+    console.log('respuesta desde la api:', response)
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener categorias:", error);
+    return [];
+  }
+}
+
 
 async function getCities(state) {
   try {
@@ -191,5 +219,7 @@ export {
   getStates,
   postSalesDetails,
   getCities,
-  getTaxStatus
+  getTaxStatus,
+  getAccountResume,
+  getAccountStaiment
 };
