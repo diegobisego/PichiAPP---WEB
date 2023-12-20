@@ -108,7 +108,7 @@ const AddProduct = () => {
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
             PRODUCTO
           </h1>
-          <form className="w-full max-w-lg">
+          <form className="max-w-lg mx-auto md:w-full border border rounded-md p-6 mt-4">
             <div className="flex flex-wrap -mx-3 mb-6">
               {/* Producto */}
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -128,7 +128,7 @@ const AddProduct = () => {
                   Peso/Cantidad *
                 </label>
                 <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 "
                   type="number"
                   placeholder="5"
                   onChange={handleQuantityProductChange}
@@ -190,7 +190,7 @@ const AddProduct = () => {
             {/* Finalizar Carga */}
             <div className="flex justify-center">
               <button
-                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 mt-6"
                 onClick={handleFinishAddProduct}
               >
                 <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">

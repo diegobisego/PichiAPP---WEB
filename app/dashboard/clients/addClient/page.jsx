@@ -2,7 +2,6 @@
 
 import axios from "axios";
 
-
 import {
   getAllClients,
   getCountries,
@@ -11,7 +10,6 @@ import {
   getTaxStatus,
 } from "@/app/components/Api";
 import { useState, useEffect } from "react";
-
 
 const AddClient = () => {
   //useState
@@ -103,7 +101,7 @@ const AddClient = () => {
 
   // condicion fiscal
   const handleSelectedTaxStatus = (event) => {
-    const selectTaxStatus = Number(event.target.value)
+    const selectTaxStatus = Number(event.target.value);
     setSelectedTaxStatus(selectTaxStatus);
   };
 
@@ -143,8 +141,8 @@ const AddClient = () => {
       idCondicionFiscal: selectedClientTaxStatus,
       ciudad: selectedClientCity,
       pais: selectedClientCountry,
-      provincia:selectedClientState,
-      dniCuit: selectedClientDniCuit
+      provincia: selectedClientState,
+      dniCuit: selectedClientDniCuit,
     };
 
     try {
@@ -160,8 +158,6 @@ const AddClient = () => {
     }
   };
 
-  
-
   const allDataLoaded = !loading;
   return (
     <>
@@ -170,9 +166,9 @@ const AddClient = () => {
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
             CLIENTE
           </h1>
-          <form className="w-full max-w-lg">
+          <form className="max-w-lg mx-auto md:w-full border border rounded-md p-6 mt-4 ">
             {/* nombre del cliente */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -189,7 +185,7 @@ const AddClient = () => {
               </div>
             </div>
             {/* direccion */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -206,8 +202,8 @@ const AddClient = () => {
               </div>
             </div>
             {/* Pais */}
-            <div className="flex flex-wrap -mx-3 mb-2">
-              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
@@ -216,7 +212,7 @@ const AddClient = () => {
                 </label>
                 <div className="relative">
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={selectedClientCountry}
                     onChange={handleSelectedCountry}
                   >
@@ -244,9 +240,10 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
+
             {/* Provincias */}
-            <div className="flex flex-wrap -mx-3 mb-2 ">
-              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
@@ -255,7 +252,7 @@ const AddClient = () => {
                 </label>
                 <div className="relative">
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={selectedClientState}
                     onChange={handleSelectedState}
                     disabled={stateLoaded}
@@ -281,9 +278,10 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
+
             {/* Ciudades */}
-            <div className="flex flex-wrap -mx-3 mb-2 ">
-              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
@@ -292,7 +290,7 @@ const AddClient = () => {
                 </label>
                 <div className="relative">
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={selectedClientCity}
                     onChange={handleSelectedCity}
                     disabled={cityLoaded}
@@ -318,8 +316,9 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
+
             {/* Telefono */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -327,16 +326,19 @@ const AddClient = () => {
                 >
                   Telefono *
                 </label>
-                <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  type="string"
-                  placeholder="Sin 0 y sin 15"
-                  onChange={handlePhoneClientChange}
-                />
+                <div className="relative">
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="string"
+                    placeholder="Sin 0 y sin 15"
+                    onChange={handlePhoneClientChange}
+                  />
+                </div>
               </div>
             </div>
-            {/* email */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+
+            {/* Email */}
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -344,16 +346,19 @@ const AddClient = () => {
                 >
                   Email *
                 </label>
-                <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  type="email"
-                  placeholder="correo@email.com"
-                  onChange={handleEmailClientChange}
-                />
+                <div className="relative">
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="email"
+                    placeholder="correo@email.com"
+                    onChange={handleEmailClientChange}
+                  />
+                </div>
               </div>
             </div>
+
             {/* DNI/CUIT */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -361,18 +366,21 @@ const AddClient = () => {
                 >
                   DNI / CUIT *
                 </label>
-                <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  type="number"
-                  placeholder="Sin puntos ni guiones"
-                  onChange={handleDniCuitClientChange}
-                  onWheel={(e) => e.target.blur()}
-                />
+                <div className="relative">
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="number"
+                    placeholder="Sin puntos ni guiones"
+                    onChange={handleDniCuitClientChange}
+                    onWheel={(e) => e.target.blur()}
+                  />
+                </div>
               </div>
             </div>
+
             {/* Condicion Fiscal */}
-            <div className="flex flex-wrap -mx-3 mb-2">
-              <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+            <div className="flex flex-wrap -mx-3 mb-2 justify-center items-center">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="grid-state"
@@ -381,12 +389,12 @@ const AddClient = () => {
                 </label>
                 <div className="relative">
                   <select
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    className="appearance-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     value={selectedClientTaxStatus}
                     onChange={handleSelectedTaxStatus}
                   >
                     <option value="" disabled>
-                      Condicion Fical
+                      Condicion Fiscal
                     </option>
                     {allTaxStatus.map((tx) => (
                       <option
@@ -409,8 +417,9 @@ const AddClient = () => {
                 </div>
               </div>
             </div>
+
             {/* Razon Social */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -418,16 +427,19 @@ const AddClient = () => {
                 >
                   Razon Social
                 </label>
-                <input
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  type="string"
-                  placeholder="La Empresa S.R.L"
-                  onChange={handleBusinessNameClientChange}
-                />
+                <div className="relative">
+                  <input
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="string"
+                    placeholder="La Empresa S.R.L"
+                    onChange={handleBusinessNameClientChange}
+                  />
+                </div>
               </div>
             </div>
+
             {/* Info Adicional */}
-            <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="flex flex-wrap -mx-3 mb-6 justify-center items-center">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
@@ -435,14 +447,17 @@ const AddClient = () => {
                 >
                   Info Adicional
                 </label>
-                <textarea
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  type="string"
-                  placeholder="Datos extras"
-                  onChange={handleAddInfoClientChange}
-                />
+                <div className="relative">
+                  <textarea
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    type="string"
+                    placeholder="Datos extras"
+                    onChange={handleAddInfoClientChange}
+                  />
+                </div>
               </div>
             </div>
+
             {/* Boton finalizar */}
             <div className="flex justify-center">
               <button
