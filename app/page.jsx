@@ -1,50 +1,20 @@
-"use client";
+// HomePage.jsx
+import React, { useEffect } from "react";
+import RootLayout from "./layout";
 
-import Link from "next/link";
-import { config } from "dotenv";
-import { useState } from "react";
-config();
-
-const Navbar = () => {
-  const [showOptions, setShowOptions] = useState(false);
-
-  const toggleOptions = () => {
-    setShowOptions(!showOptions);
-  };
+const HomePage = () => {
+  useEffect(() => {
+    // Cualquier lógica específica para la página principal
+  }, []);
 
   return (
-    <nav className="bg-teal-800 text-white p-4 flex justify-between items-center">
-      {/* Elemento izquierdo (nombre de la empresa desde .env.local) */}
-      <div className="text-white text-2xl font-bold">
-        <Link href={"/dashboard"}>{process.env.NEXT_PUBLIC_EMPRESA}</Link>
+    <RootLayout>
+      <div>
+        <h1>Bienvenido a mi aplicación</h1>
+        {/* Otro contenido específico de la página principal */}
       </div>
-
-      {/* Elemento derecho (botón de usuario con opciones) */}
-      <div className="relative group">
-        <button
-          onClick={toggleOptions}
-          className="flex items-center space-x-2 text-white focus:outline-none"
-        >
-          <div className="w-8 h-8 rounded-full bg-gray-200">
-            {/* Aquí puedes agregar una letra o icono en lugar de una imagen */}
-            <span className="text-blue-500 text-2xl font-semibold">
-              {process.env.NEXT_PUBLIC_LETRA_USUARIO}
-            </span>
-          </div>
-        </button>
-
-        {/* Opciones de usuario (mostradas cuando se hace clic) */}
-        {showOptions && (
-          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 shadow-lg rounded-lg py-2">
-            <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-black">
-              Logout
-            </button>
-            {/* Agrega más opciones según sea necesario */}
-          </div>
-        )}
-      </div>
-    </nav>
+    </RootLayout>
   );
 };
 
-export default Navbar;
+export default HomePage;

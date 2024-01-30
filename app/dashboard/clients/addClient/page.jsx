@@ -151,10 +151,10 @@ const AddClient = () => {
         clientData
       );
       result.status === 201
-        ? console.log("Se cargó el producto:", result)
-        : console.log("error al cargar el producto");
+        ? console.log("Se cargó el cliente:", result)
+        : console.log("error al cargar el cliente");
     } catch (error) {
-      console.error("Error al cargar el producto:", error);
+      console.error("Error al cargar el cliente:", error);
     }
   };
 

@@ -30,6 +30,18 @@ async function getAllClients() {
   }
 }
 
+async function getPayment(nroComprobante) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/sales/bills/payments/${nroComprobante}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener pago:", error);
+    return [];
+  }
+}
+
 async function getPayMethods() {
   try {
     const response = await axios.get(
@@ -163,6 +175,18 @@ async function getTaxStatus() {
   }
 }
 
+async function getBillsClient(id) {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/sales/bills/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener categorias:", error);
+    return [];
+  }
+}
+
 /*METODOS POST, PUT Y PATCH*/
 
 async function postSales(sale) {
@@ -206,6 +230,16 @@ async function patchProduct(id, updatedData) {
   }
 }
 
+async function Payments(payment) {
+  try {
+    const result = await axios.post('ruta', payment);
+    return result.data;
+  } catch (error) {
+    console.error('Error al realizar el pago: ', error);
+    return { error: 'Hubo un error al realizar el pago.' };
+  }
+}
+
 
 export {
   getAllProducts,
@@ -221,5 +255,8 @@ export {
   getCities,
   getTaxStatus,
   getAccountResume,
-  getAccountStaiment
+  getAccountStaiment,
+  Payments,
+  getBillsClient,
+  getPayment
 };

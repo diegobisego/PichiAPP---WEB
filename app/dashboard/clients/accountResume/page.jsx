@@ -41,7 +41,7 @@ function CurrentAccounts() {
   return (
     <>
       {allDataLoaded ? (
-        <div>
+        <div className="md:flex md:flex-col md:w-3/4 md:items-center md:border md:border-white md:rounded-md md:justify-center md:mx-auto md:my-auto md:mt-2">
           <SalesDetails saleDetail={allAccountsResume} accountStaiment={allAccountsStaiment}/>
         </div>
       ) : (

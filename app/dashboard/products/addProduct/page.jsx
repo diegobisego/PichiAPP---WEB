@@ -104,11 +104,11 @@ const AddProduct = () => {
   return (
     <>
       {allDataLoaded ? (
-        <div className="m-4 p-6">
+        <div className="m-4 p-6 md:flex md:flex-col md:mx-auto md:my-auto">
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
             PRODUCTO
           </h1>
-          <form className="max-w-lg mx-auto md:w-full border border rounded-md p-6 mt-4">
+          <form className=" mx-auto md:w-2/3 md:h-3/4 border border rounded-md p-6 mt-4 font-">
             <div className="flex flex-wrap -mx-3 mb-6">
               {/* Producto */}
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">

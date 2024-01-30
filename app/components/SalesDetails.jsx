@@ -40,7 +40,7 @@ export function SalesDetails({ saleDetail, accountStaiment }) {
   return (
     <>
       {uniqueClientes.map((clienteId) => (
-        <div key={clienteId} className="mb-4">
+        <div key={clienteId} className="mb-4 md:flex md:w-3/4">
           <Accordion open={!!openAccordions[clienteId]}>
             <AccordionHeader onClick={() => handleOpen(clienteId)}>
               <div className="text-white w-full">
