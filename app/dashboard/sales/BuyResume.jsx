@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import { MdDelete } from "react-icons/md";
 import { Payments, postSales, postSalesDetails } from "../../components/Api";
 import { HeaderContext } from "../../context/HeaderContext";
-import { Payment } from "@/app/components/utilFunctions";
 import Swal from "sweetalert2";
 import moment from "moment";
 
@@ -38,8 +37,6 @@ export function BuyResume(props) {
 
       const saleData = {
         idCodigoComprobante: 1,
-        nroComprobante: headerInfo.selectBillNumber,
-        fecha: moment(headerInfo.selectedDate).format("YYYY-MM-DD HH:mm:ss"),
         idCliente: parseInt(headerInfo.selectedClient, 10),
         idVendedor: 1,
         idMetodoPago: parseInt(headerInfo.selectedPayMethod, 10),
@@ -47,10 +44,14 @@ export function BuyResume(props) {
         impuestos,
         descuentos,
         total: totalConImpuestos,
+        nroComprobante: headerInfo.selectBillNumber,
+        fecha: moment(headerInfo.selectedDate).format("YYYY-MM-DD HH:mm:ss"),
+        sucursal: 1
       };
 
       // Realizar la solicitud de venta
       const resultPostSale = await postSales(saleData);
+      console.log('resultPostSale: ', resultPostSale)
       const idVenta = resultPostSale.data.idVenta;
 
       // agrego el id de la venta en cada una de los detalles de las ventas

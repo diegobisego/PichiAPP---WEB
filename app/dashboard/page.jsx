@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import LinksNavDashboard from "../components/LinksNavDashboard";
+import RootLayout from "../layout";
 
 export default function Navigation() {
   useEffect(() => {
@@ -18,7 +19,9 @@ export default function Navigation() {
 
   return (
     <>
+    <RootLayout includeNavbar={true}>
       <LinksNavDashboard />
+      </RootLayout>
     </>
   );
 }

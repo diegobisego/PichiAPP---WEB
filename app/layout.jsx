@@ -1,3 +1,5 @@
+'use client'
+
 // RootLayout.jsx
 import { Inter } from "next/font/google";
 import Navbar from "./components/Navbar"; 
@@ -7,8 +9,9 @@ import { SalesProvider } from "./context/SalesContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({ children, includeNavbar = true }) {
-  return (
+export default function RootLayout({ children, includeNavbar}) {
+
+ return (
     <html lang="en">
       <body className={inter.className}>
         {includeNavbar && <Navbar />}

@@ -10,6 +10,7 @@ import {
   getTaxStatus,
 } from "@/app/components/Api";
 import { useState, useEffect } from "react";
+import RootLayout from "@/app/layout";
 
 const AddClient = () => {
   //useState
@@ -161,6 +162,7 @@ const AddClient = () => {
   const allDataLoaded = !loading;
   return (
     <>
+    <RootLayout includeNavbar={true}>
       {allDataLoaded ? (
         <div className="m-4 p-6">
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
@@ -474,6 +476,7 @@ const AddClient = () => {
       ) : (
         <div className="loader">Cargando</div>
       )}
+      </RootLayout>
     </>
   );
 };

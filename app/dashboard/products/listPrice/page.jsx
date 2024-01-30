@@ -9,6 +9,7 @@ import {
 } from "@/app/components/Api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import RootLayout from "@/app/layout";
 
 const MySwal = withReactContent(Swal);
 
@@ -192,6 +193,7 @@ function ListPrice() {
 
   return (
     <>
+    <RootLayout includeNavbar={true}>
       {allDataLoaded ? (
         <div>
           <h1 className="text-2xl font-bold mb-4 text-center mt-4">
@@ -245,6 +247,7 @@ function ListPrice() {
       ) : (
         <div className="loader">Cargando</div>
       )}
+      </RootLayout>
     </>
   );
 }

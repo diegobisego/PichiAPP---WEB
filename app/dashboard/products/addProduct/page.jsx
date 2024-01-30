@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { useState, useEffect } from "react";
 import { getProductCategory, getProductUm } from "@/app/components/Api";
+import RootLayout from "@/app/layout";
 
 const AddProduct = () => {
   // Seteos de variables
@@ -103,6 +104,7 @@ const AddProduct = () => {
 
   return (
     <>
+    <RootLayout includeNavbar={true}>
       {allDataLoaded ? (
         <div className="m-4 p-6 md:flex md:flex-col md:mx-auto md:my-auto">
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
@@ -203,6 +205,7 @@ const AddProduct = () => {
       ) : (
         <div className="loader">Cargando</div>
       )}
+      </RootLayout>
     </>
   );
   

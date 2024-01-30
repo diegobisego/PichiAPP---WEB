@@ -10,6 +10,7 @@ import {
 import moment from "moment/moment";
 import axios from "axios";
 
+
 export default function AddPayments({ payment }) {
   // seccion primera carga
   const [clientLoaded, setClientLoaded] = useState(true); // carga de clientes
@@ -187,6 +188,7 @@ useEffect(() => {
 
   return (
     <>
+
       {allDataLoaded ? (
         <div className="m-4 p-6 md:flex md:flex-col md:mx-auto md:my-auto">
           <h1 className="flex items-center justify-center text-3xl font-bold dark:text-white mb-6">
@@ -318,6 +320,7 @@ useEffect(() => {
       ) : (
         <div className="loader">Cargando</div>
       )}
+
     </>
   );
 }
