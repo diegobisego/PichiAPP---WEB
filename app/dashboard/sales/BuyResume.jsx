@@ -51,7 +51,7 @@ export function BuyResume(props) {
 
       // Realizar la solicitud de venta
       const resultPostSale = await postSales(saleData);
-      console.log('resultPostSale: ', resultPostSale)
+
       const idVenta = resultPostSale.data.idVenta;
 
       // agrego el id de la venta en cada una de los detalles de las ventas
